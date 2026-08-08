@@ -1,0 +1,115 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+/* Real light/dark theme, scoped via the [data-theme] attribute that
+   DashboardLayout puts on its own root wrapper (see ThemeContext.jsx) - so
+   the public Homepage/Login/Signup pages are always the original dark
+   design regardless of a stored preference. Dark values are the exact
+   original hardcoded hex values converted to "R G B" for Tailwind's
+   rgb(var(...) / <alpha-value>) opacity syntax, so dark mode renders
+   identically to before this change. */
+:root {
+  --color-base: 10 10 10;
+  --color-surface: 19 19 19;
+  --color-surface2: 22 22 22;
+  --color-border: 36 36 36;
+  --color-fg: 255 255 255;
+  --color-muted: 156 163 175;
+}
+
+[data-theme='light'] {
+  --color-base: 255 255 255;
+  --color-surface: 246 246 247;
+  --color-surface2: 238 238 240;
+  --color-border: 224 224 227;
+  --color-fg: 17 17 17;
+  --color-muted: 107 114 128;
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background-color: #0a0a0a;
+  color: #ffffff;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #0a0a0a;
+}
+::-webkit-scrollbar-thumb {
+  background: #2a2a2a;
+  border-radius: 8px;
+}
+
+@layer components {
+  /* Surfaces — depth comes from base -> surface -> hairline border only, never shadows */
+  .card {
+    @apply bg-surface border border-border rounded-card transition-transform duration-150;
+  }
+  .card-hover {
+    @apply hover:scale-102 hover:border-accent-500/40;
+  }
+
+  /* Buttons — background-color transition only, 150ms, two variants total */
+  .btn-accent {
+    @apply bg-accent-500 hover:bg-accent-600 text-white font-medium rounded-btn transition-colors duration-150;
+  }
+  .btn-outline {
+    @apply border border-accent-500 text-accent-500 hover:bg-accent-500/10 font-medium rounded-btn transition-colors duration-150;
+  }
+
+  /* Inputs — dark bg, hairline border, orange border on focus */
+  .input {
+    @apply bg-surface2 border border-border rounded-input px-4 py-2.5 text-sm text-white placeholder-muted
+      focus:outline-none focus:border-accent-500 transition-colors duration-150;
+  }
+
+  /* Nav — active state gets background + border, never a shadow */
+  .nav-link {
+    @apply flex items-center gap-3 px-4 py-2.5 rounded-btn text-sm font-medium text-muted hover:bg-surface2 hover:text-white transition-colors duration-150;
+  }
+  .nav-link-active {
+    @apply flex items-center gap-3 px-4 py-2.5 rounded-btn text-sm font-medium bg-accent-500/10 text-accent-500 border border-accent-500/40;
+  }
+
+  /* Status pills — used in tables/lists, green/red reserved for status only */
+  .pill-success {
+    @apply text-xs font-medium px-2.5 py-1 rounded-full bg-success/10 text-success;
+  }
+  .pill-danger {
+    @apply text-xs font-medium px-2.5 py-1 rounded-full bg-danger/10 text-danger;
+  }
+  .pill-muted {
+    @apply text-xs font-medium px-2.5 py-1 rounded-full bg-muted/10 text-muted;
+  }
+  .pill-accent {
+    @apply text-xs font-medium px-2.5 py-1 rounded-full bg-accent-500/10 text-accent-500;
+  }
+
+  /* Table rows — no zebra stripes, hover highlight only, 44px row height */
+  .table-row {
+    @apply flex items-center gap-4 h-11 px-4 border-b border-border hover:bg-surface2/60 transition-colors duration-150;
+  }
+
+  /* Page transition */
+  .page-fade {
+    @apply animate-[fadein_200ms_ease-out];
+  }
+}
+
+@keyframes fadein {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
