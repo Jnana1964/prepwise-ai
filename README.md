@@ -1,10 +1,10 @@
 <div align="center">
 
-# 🚀 PrepWise AI
+🚀 PrepWise AI
 
-### **AI-Powered Career Preparation Platform**
+AI-Powered Career Preparation Platform
 
-**Resume Intelligence → Opportunity Matching → Skill Building → Mock Assessment → AI Mock Interview → Performance Analytics**
+Resume Intelligence → Opportunity Matching → Skill Building → Mock Assessment → AI Mock Interview → Performance Analytics
 
 <br>
 
@@ -19,29 +19,22 @@
 
 <br>
 
-**Prepare smarter. Practice deliberately. Improve measurably.**
+Prepare smarter. Practice deliberately. Improve measurably.
 
 </div>
 
----
-
-# 🎯 What is PrepWise AI?
+🎯 What is PrepWise AI?
 
 PrepWise AI is a full-stack AI-powered career preparation platform designed for students and early-career developers preparing for technical placements and job applications.
 
 Instead of treating resume analysis, job discovery, coding practice, assessments, interviews, and progress tracking as separate tools, PrepWise AI connects them into one placement workflow.
 
-The platform turns a candidate's **real resume data, skills, preparation activity, assessment performance, interview performance, and application activity** into a connected career-preparation experience.
+The platform turns a candidate's real resume data, skills, preparation activity, assessment performance, interview performance, and application activity into a connected career-preparation experience.
 
-> **No fabricated dashboard numbers.  
-> No fake application submissions.  
-> No random match percentages.**
+No fabricated dashboard numbers.No fake application submissions.No random match percentages.
 
----
+🔥 Product Workflow
 
-# 🔥 Product Workflow
-
-```text
 ┌──────────────────────┐
 │    Resume Upload     │
 └──────────┬───────────┘
@@ -916,8 +909,8 @@ Production secrets should be configured through the deployment platform's enviro
 <div align="center">
 Bollu Jnana Keerthana
 Computer Science Engineering · SRM University
-GitHub: https://github.com/Jnana1964
-LinkedIn: www.linkedin.com/in/jnana-keerthana-1906jk
+GitHub: [Jnana1964](https://github.com/Jnana1964)
+LinkedIn: [Jnana Keerthana](https://www.linkedin.com/in/jnana-keerthana-1906jk)
 
 <br>
 
