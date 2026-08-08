@@ -663,18 +663,11 @@ Architecture
                       ┌───────┐ ┌─────────────┐
                       │ MySQL │ │ Gemini API  │
                       └───────┘ └─────────────┘
-🔗 Production Links
-Live Application
+## 🔗 Production Links
 
-https://prepwise-ai-pink.vercel.app
-
-Backend API
-
-https://prepwise-ai-production.up.railway.app
-
-Source Code
-
-https://github.com/Jnana1964/prepwise-ai
+- **Live Application:** [PrepWise AI](https://prepwise-ai-pink.vercel.app)
+- **Backend API:** [Railway Backend](https://prepwise-ai-production.up.railway.app)
+- **Source Code:** [GitHub Repository](https://github.com/Jnana1964/prepwise-ai)
 
 🌐 Opportunity Integration
 
