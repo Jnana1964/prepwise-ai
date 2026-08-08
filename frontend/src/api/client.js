@@ -3,7 +3,7 @@ import axios from 'axios';
 // Single axios instance. All real data flows through this client -
 // no mock/fake data is hardcoded in any page component.
 const client = axios.create({
-  baseURL: '/api',
+  baseURL: `${import.meta.env.VITE_API_URL}/api`,
   headers: { 'Content-Type': 'application/json' }
 });
 
