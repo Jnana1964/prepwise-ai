@@ -21,7 +21,8 @@ export function createApp() {
 
   const allowedOrigins = [
   'http://localhost:5173',
-  'https://prepwise-ai-pink.vercel.app'
+  'https://prepwise-ai-pink.vercel.app',
+  'https://prepwise-ai-1-zm7p.onrender.com'
 ];
 
 app.use(cors({
