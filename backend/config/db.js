@@ -1,8 +1,5 @@
 import { Sequelize } from 'sequelize';
 
-// Single database for the whole app - MySQL.
-// Tests use an in-memory SQLite database so the test suite
-// does not require a live MySQL server.
 export function buildSequelize() {
   if (process.env.NODE_ENV === 'test') {
     return new Sequelize('sqlite::memory:', {
@@ -18,6 +15,12 @@ export function buildSequelize() {
       host: process.env.DB_HOST || process.env.MYSQLHOST || 'localhost',
       port: process.env.DB_PORT || process.env.MYSQLPORT || 3306,
       dialect: 'mysql',
+      dialectOptions: {
+        ssl: {
+          require: true,
+          rejectUnauthorized: false
+        }
+      },
       logging: false
     }
   );
