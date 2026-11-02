@@ -2,9 +2,9 @@
 
 # 🚀 PrepWise AI
 
-**AI-Powered Placement Prep, Built on Real Data, Not Fake Scores**
+**AI-Powered Career Preparation Platform**
 
-Resume Analysis → Job Matching → Skill Practice → Mock Assessment → AI Interview → Analytics
+Resume Intelligence → Opportunity Matching → Skill Building → Mock Assessment → AI Mock Interview → Performance Analytics
 
 <img src="https://img.shields.io/badge/status-deployed-brightgreen?style=flat-square" />
 <img src="https://img.shields.io/badge/React-Vite-61DAFB?style=flat-square&logo=react&logoColor=black" />
@@ -14,6 +14,8 @@ Resume Analysis → Job Matching → Skill Practice → Mock Assessment → AI I
 <img src="https://img.shields.io/badge/Auth-JWT-000000?style=flat-square&logo=jsonwebtokens&logoColor=white" />
 <img src="https://img.shields.io/badge/Tailwind-CSS-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white" />
 
+**Prepare smarter. Practice deliberately. Improve measurably.**
+
 **Live:** [prepwise-ai-1-zm7p.onrender.com](https://prepwise-ai-1-zm7p.onrender.com) · **API:** [prepwise-ai-1j84.onrender.com](https://prepwise-ai-1j84.onrender.com/api/health)
 
 <sub>Hosted on Render's free tier, so the first request after a period of inactivity can take up to a minute while the server wakes up.</sub>
@@ -22,212 +24,845 @@ Resume Analysis → Job Matching → Skill Practice → Mock Assessment → AI I
 
 ---
 
-A full-stack placement-prep platform that connects resume analysis, job matching, practice, mock assessments, AI interviews and progress tracking into **one workflow**, instead of six separate tools.
+## 🎯 What is PrepWise AI?
 
-**The core design decision:** scores are **deterministic**. ATS score, job match and progress are calculated from real data. Gemini only writes explanations, rewrites and feedback. AI text never overwrites a score.
+PrepWise AI is a full-stack AI-powered career preparation platform designed for students and early-career developers preparing for technical placements and job applications.
 
-## What it does
+Instead of treating resume analysis, job discovery, coding practice, assessments, interviews, and progress tracking as separate tools, PrepWise AI connects them into one placement workflow.
 
-| Module | What it does |
-|---|---|
-| 📄 **Resume Intelligence** | PDF/DOCX upload → ATS score, skill detection, missing keywords, JD matching, tailored resume export |
-| 🎯 **Opportunity Matcher** | Matches your profile to jobs (DB catalog + Internshala sync) with matched / missing skills |
-| 📌 **Application Tracker** | Saved → Applied → Interview → Offered / Rejected |
-| 🧠 **Skill Builder** | MCQ, coding (run against real test cases), aptitude, HR, AI tutor |
-| 📝 **Mock Assessment** | Company-specific, timed, auto-submit; you must pass (default 80%) to unlock the interview |
-| 🎤 **AI Mock Interview** | Questions built from your resume, projects, target company and role |
-| 📊 **Analytics** | Trends, weak and strong areas, progress over time |
+The platform turns a candidate's real resume data, skills, preparation activity, assessment performance, interview performance, and application activity into a connected career-preparation experience.
 
-## Architecture
+- No fabricated dashboard numbers.
+- No fake application submissions.
+- No random match percentages.
 
+---
+
+## 🔥 Product Workflow
+
+```text
+┌──────────────────────┐
+│    Resume Upload     │
+└──────────┬───────────┘
+           ↓
+┌──────────────────────────────┐
+│     Resume Intelligence      │
+│                              │
+│ ATS • Skills • Quality       │
+│ Sections • Missing Skills    │
+│ JD Matching • Suggestions    │
+└──────────┬───────────────────┘
+           ↓
+┌──────────────────────────────┐
+│     Opportunity Matcher      │
+│                              │
+│ Role Fit • Skill Match       │
+│ Matched Skills • Missing     │
+│ Skills • Job Details         │
+└──────────┬───────────────────┘
+           ↓
+┌──────────────────────────────┐
+│      Application Tracker     │
+│                              │
+│ Saved → Applied → Interview  │
+│ → Offered / Rejected         │
+└──────────┬───────────────────┘
+           ↓
+┌──────────────────────────────┐
+│        Skill Builder         │
+│                              │
+│ MCQ • Coding • Aptitude      │
+│ AI Tutor • HR • Company      │
+└──────────┬───────────────────┘
+           ↓
+┌──────────────────────────────┐
+│       Mock Assessment        │
+│                              │
+│ Company-Specific Assessment  │
+│ Aptitude • Coding • Behavioral│
+└──────────┬───────────────────┘
+           │
+           │ ≥ configured score
+           ↓
+┌──────────────────────────────┐
+│       AI Mock Interview      │
+│                              │
+│ Resume • Projects • Role     │
+│ Company • Technical • HR     │
+└──────────┬───────────────────┘
+           ↓
+┌──────────────────────────────┐
+│     Performance Analytics    │
+│                              │
+│ Trends • Weak Areas •        │
+│ Strong Areas • Progress      │
+└──────────┬───────────────────┘
+           ↓
+┌──────────────────────────────┐
+│     Career Command Center    │
+│                              │
+│ What have I completed?       │
+│ Where am I now?              │
+│ What should I do next?       │
+└──────────────────────────────┘
 ```
-React + Vite (Render static site)
-        │  REST + JWT
-        ▼
-Node.js + Express (Render web service) ──► Google Gemini API (server-side only)
-        │  Sequelize
-        ▼
-      MySQL
-```
 
-## Engineering highlights
+---
 
-- **Deterministic scoring, AI only for generation.** Scores are reproducible and testable.
-- **Server-enforced progression gates.** Interview access depends on the assessment score stored in the DB, not on a frontend flag.
-- **Real coding evaluation.** Submissions run against test cases; nothing is self-reported.
-- **Resume tailoring can't fabricate.** It rewords and reorders your existing content; it never invents employers, dates or achievements.
-- **Security.** bcrypt password hashing, JWT-protected routes, Gemini key kept server-side, secrets in env vars.
-- **Tests.** Jest + Supertest for ATS determinism, match boundaries, auth, assessment threshold and interview gating.
+## ✨ Core Features
 
-## Deep dive
+### 📄 1. Resume Intelligence
 
-<details>
-<summary><b>📄 Resume Intelligence: full capabilities</b></summary>
+Turn a raw resume into a structured candidate profile.
 
-- PDF/DOCX upload and parsing
-- Deterministic ATS-style score, resume quality score, recruiter-oriented signals
-- Section analysis, skill and keyword detection, missing skills and keywords
-- Strengths / weaknesses and improvement suggestions
+**Capabilities**
+
+- PDF/DOCX resume upload
+- Deterministic ATS-style analysis
+- Resume quality scoring
+- Recruiter-oriented signals
+- Section analysis
+- Skill detection
+- Keyword detection
+- Missing skills
+- Missing keywords
+- Strengths and weaknesses
 - Job-description matching
-- Direct editing with re-scoring after changes
-- JD-specific tailored resume generation, PDF/DOC export
+- Resume improvement suggestions
+- Direct resume editing
+- Re-scoring after changes
+- JD-specific Tailored Resume generation
+- PDF/DOC export
 
-</details>
+**Important Engineering Decision**
 
-<details>
-<summary><b>✍️ Resume tailoring rules (what the AI can and can't do)</b></summary>
+Core scoring is separated from AI-generated commentary.
 
-| ✅ Can | ❌ Never invents |
+Gemini can assist with:
+
+- Explanation
+- Rewriting
+- Suggestions
+- Generation
+- Open-ended feedback
+
+But AI-generated text does not silently overwrite the underlying deterministic score.
+
+### 🎯 2. Opportunity Matcher
+
+Opportunity Matcher connects the candidate's resume intelligence with available job and internship opportunities.
+
+| Candidate signals | Job signals | Results |
+|---|---|---|
+| Detected skills | Required skills | Match percentage |
+| Missing skills | Preferred skills | Matched skills |
+| Predicted role | Role/category | Missing skills |
+| Resume quality signals | Job metadata | Match explanation |
+| Education | | Job details |
+| Experience | | Save action |
+| Projects | | Apply action |
+| Certifications | | |
+
+The current opportunity pipeline supports a database-backed job catalog and Internshala synchronization.
+
+**Application principle**
+
+```text
+Candidate Resume
+       ↓
+Candidate Profile
+       ↓
+Opportunity Matching
+       ↓
+External Job Posting
+       ↓
+Candidate Applies Externally
+```
+
+PrepWise AI does not submit applications on behalf of the candidate.
+
+The Apply action opens the real external opportunity.
+
+### 📌 3. Application Tracker
+
+A dedicated application tracker records the candidate's engagement with opportunities.
+
+```text
+Saved
+  ↓
+Applied
+  ↓
+Interview
+  ↓
+Offered / Rejected
+```
+
+The tracker can maintain:
+
+- Application status
+- Job association
+- Dates
+- Candidate activity
+- Current pipeline state
+
+PrepWise AI records the candidate's application activity but does not pretend to submit external applications.
+
+### 🧠 4. Skill Builder
+
+Skill Builder provides focused preparation across multiple categories.
+
+| Category | Purpose |
 |---|---|
-| Reword existing experience | Employers |
-| Reorganise relevant sections | Job titles |
-| Emphasise matching skills | Dates |
-| Target the supplied JD | Achievements or experience |
+| 📝 MCQ | Technical knowledge |
+| 💻 Coding | Programming problem solving |
+| 📐 Aptitude | Quantitative and logical preparation |
+| 🤖 AI Tutor | Interactive AI-supported learning |
+| 👔 HR | Behavioral preparation |
+| 🏢 Company | Company-specific preparation |
 
-</details>
+**Practice experience**
 
-<details>
-<summary><b>🎯 Opportunity pipeline (Internshala sync)</b></summary>
+- One-question-at-a-time flow
+- Progress tracking
+- Real coding test execution
+- Randomized practice subsets
+- Result summaries
+- AI-supported open-answer feedback
+- AI Tutor conversations
+- Practice history
 
+Coding submissions are evaluated against actual test cases rather than self-reported results.
+
+### 📝 5. Company-Specific Mock Assessment
+
+Mock Assessments are company-specific.
+
+Company selection uses searchable company data and the assessment pattern can change according to the selected company's configured style.
+
+**Assessment capabilities**
+
+- Company-specific patterns
+- Aptitude-focused assessments
+- Coding-focused assessments
+- Balanced assessments
+- Behavioral assessments
+- Countdown timer
+- Automatic submission at timeout
+- Score calculation
+- Configurable pass threshold
+- Assessment history
+- Progression gate
+
+The default configurable assessment threshold is **80%**, configured through:
+
+```env
+MOCK_ASSESSMENT_PASS_THRESHOLD=80
 ```
-External source → Sync → Normalised job data → MySQL jobs table
-→ Candidate matching → Match explanation → External apply link
+
+The webcam functionality is a visual proctoring simulation only. It does not record or upload webcam footage.
+
+### 🎤 6. AI Mock Interview
+
+The AI Mock Interview experience is designed around the candidate instead of using a generic question list.
+
+Questions can incorporate:
+
+- Resume
+- Projects
+- Target company
+- Target role
+- Technical topics
+- Behavioral topics
+
+The interview session records performance data that can contribute to future preparation recommendations and analytics.
+
+### 📊 7. Performance Analytics
+
+Performance Analytics aggregates historical activity across the platform.
+
+**Analytics areas**
+
+- ATS trends
+- Coding progress
+- Aptitude progress
+- Interview scores
+- Skill progress
+- Weak areas
+- Strong areas
+- Application activity
+- Assessment history
+- Interview history
+
+The objective is to show progress over time, not just a single score.
+
+---
+
+## 🤖 AI Integration
+
+PrepWise AI integrates the Google Gemini API for generative and reasoning-based features.
+
+**Gemini-powered functionality**
+
+- AI Tutor
+- Resume wording assistance
+- Resume improvement
+- Tailored resume generation
+- Open-ended answer feedback
+- Interview-oriented feedback
+- AI-supported preparation
+
+**AI architecture**
+
+```text
+Frontend
+   │
+   │ REST API
+   ↓
+Express Backend
+   │
+   │ Server-side AI request
+   ↓
+Google Gemini API
+   │
+   ↓
+Generated Response
+   │
+   ↓
+Backend
+   │
+   ↓
+Frontend
 ```
 
-- Pulls current public internship listings and stores normalised records
-- Periodic re-sync updates existing opportunities
-- Fails softly if the source changes its format
-- **Never submits applications.** "Apply" opens the real posting; the candidate applies there
+Gemini API credentials remain server-side. The frontend never directly exposes the Gemini API key.
 
-Match inputs: candidate skills, missing skills, predicted role, education, projects, certifications vs. job required/preferred skills and category.
+---
 
-</details>
+## 🧮 Real-Data Philosophy
 
-<details>
-<summary><b>📝 Mock assessment and progression gates</b></summary>
+PrepWise AI deliberately avoids fake dashboard metrics.
 
+**Deterministic systems:** the following are calculated from actual application data:
+
+- ATS score
+- Resume quality signals
+- JD match
+- Job match
+- Matched skills
+- Missing skills
+- Skill progress
+- Assessment results
+- Next Best Action
+- Analytics trends
+- Analytics deltas
+
+**AI-assisted systems:** Gemini is used where generative reasoning is valuable:
+
+- AI Tutor
+- Resume improvement
+- Tailored resume generation
+- Open-ended feedback
+- Interview support
+
+This separation keeps scoring and state transitions predictable while still using AI where it adds value.
+
+---
+
+## 🏗️ Architecture
+
+```text
+┌──────────────────────────────────────────────────────────┐
+│                     React + Vite                          │
+│                                                          │
+│ Dashboard • Resume • Opportunities • Skills • Assessment │
+│ Interview • Applications • Analytics                     │
+└──────────────────────────┬───────────────────────────────┘
+                           │
+                           │ REST API / Axios
+                           │ JWT
+                           ▼
+┌──────────────────────────────────────────────────────────┐
+│                  Express + Node.js                        │
+│                                                          │
+│ Auth • Resume • ATS • Jobs • Applications • Skills       │
+│ Assessment • Interview • Analytics                       │
+└──────────────────────────┬───────────────────────────────┘
+                           │
+                           │ Sequelize / MySQL
+                           ▼
+┌──────────────────────────────────────────────────────────┐
+│                         MySQL                            │
+│                                                          │
+│ Users • Resumes • Resume Analyses • Jobs • Applications   │
+│ Skills • Assessments • Interviews • Metrics • Companies  │
+└──────────────────────────────────────────────────────────┘
+
+                           │
+                           │ Server-side AI requests
+                           ▼
+┌──────────────────────────────────────────────────────────┐
+│                    Google Gemini API                     │
+│                                                          │
+│ Tutor • Resume Assistance • Feedback • Interview Support │
+└──────────────────────────────────────────────────────────┘
 ```
-Resume → Skill Builder → Mock Assessment → score ≥ threshold → AI Mock Interview → Analytics
-```
 
-- Patterns per company: aptitude-heavy, coding-heavy, balanced, behavioural
-- Countdown timer, auto-submit on timeout, attempt history
-- Pass threshold is configurable: `MOCK_ASSESSMENT_PASS_THRESHOLD=80`
-- The gate reads the **stored** score from MySQL, so it can't be bypassed from the browser
-- Webcam is a visual proctoring simulation only; nothing is recorded or uploaded
+---
 
-</details>
+## 🛠️ Tech Stack
 
-<details>
-<summary><b>📊 Analytics tracked</b></summary>
+| Area | Technologies |
+|---|---|
+| **Frontend** | React, Vite, Tailwind CSS, React Router DOM, Axios, Recharts, Framer Motion, Lucide React |
+| **Backend** | Node.js, Express.js, Sequelize, MySQL, MySQL2, JWT, bcrypt / bcryptjs, Multer, REST APIs, CORS |
+| **AI** | Google Gemini API, @google/genai, Gemini generative AI services |
+| **Testing** | Jest, Supertest |
+| **Deployment** | Render (frontend static site), Render (backend web service), MySQL (database) |
 
-ATS trend · coding progress · aptitude progress · interview scores · skill progress · weak / strong areas · application activity · assessment and interview history, shown as trends and deltas, not just the latest score.
+---
 
-</details>
+## 🗄️ Database
 
-<details>
-<summary><b>🗄️ Database schema</b></summary>
+PrepWise AI uses MySQL as its primary database. There is no MongoDB dependency in the current architecture.
 
-MySQL via Sequelize. Schema: [`backend/database/schema.sql`](backend/database/schema.sql)
+**Core data areas**
 
 `users` · `resumes` · `resume_analyses` · `jobs` · `applications` · `skill_progress` · `assessment_attempts` · `interview_sessions` · `interview_questions` · `companies` · `metric_snapshots`
 
-</details>
+Authentication stores passwords as bcrypt hashes, never plaintext passwords.
 
-<details>
-<summary><b>🔐 Auth flow and security</b></summary>
+The database schema is maintained under `backend/database/schema.sql`.
 
+---
+
+## 🔐 Authentication & Security
+
+PrepWise AI uses JWT-based authentication.
+
+**Security features**
+
+- JWT authentication
+- Protected API routes
+- Protected frontend routes
+- bcrypt password hashing
+- Environment-based secrets
+- CORS protection
+- Server-side Gemini API calls
+- `.env` excluded from Git
+- API keys excluded from Git
+- Generated uploads excluded
+- `node_modules` excluded
+
+**Authentication flow**
+
+```text
+User
+ ↓
+Sign Up / Login
+ ↓
+Backend validates credentials
+ ↓
+Password verified / hashed
+ ↓
+JWT issued
+ ↓
+Frontend stores token
+ ↓
+Protected requests include:
+Authorization: Bearer <token>
 ```
-Sign up / login → backend validates → bcrypt verify → JWT issued
-→ frontend sends  Authorization: Bearer <token>  on protected routes
-```
 
-- bcrypt-hashed passwords, never plaintext
-- Protected API routes **and** protected frontend routes
-- CORS restricted to the client origin
-- Gemini key and all secrets server-side only, in env vars; `.env`, uploads and `node_modules` git-ignored
+---
 
-</details>
+## 🔑 Environment Variables
 
-<details>
-<summary><b>🧪 What the tests cover</b></summary>
+Create `backend/.env`:
 
-ATS determinism · job-match boundaries · auth validation · assessment threshold · interview gating · company isolation · application authorisation · API behaviour
-
-</details>
-
-<details>
-<summary><b>🔑 Environment variables</b></summary>
-
-`backend/.env`
 ```env
 NODE_ENV=development
+
 PORT=5000
+
 DB_HOST=localhost
 DB_PORT=3306
 DB_NAME=prepwise_ai_app
 DB_USER=root
 DB_PASSWORD=your_password
+
 JWT_SECRET=your_long_random_secret
+
 GEMINI_API_KEY=your_gemini_api_key
 GEMINI_MODEL=gemini-2.5-flash
+
 CLIENT_ORIGIN=http://localhost:5173
+
 MOCK_ASSESSMENT_PASS_THRESHOLD=80
 ```
 
-`frontend/.env`
+**Frontend environment:** create `frontend/.env`:
+
 ```env
 VITE_API_URL=http://localhost:5000
 ```
 
-Production: `VITE_API_URL=https://prepwise-ai-1j84.onrender.com`. Vite bakes this in at **build time**, so redeploy the frontend after changing it.
+**Production frontend** uses:
 
-</details>
-
-<details>
-<summary><b>📁 Project structure</b></summary>
-
-```
-prepwise-ai/
-├── frontend/src/   api · components · contexts · layouts · pages · services · utils
-└── backend/        config · controllers · data · database · middleware · models
-                    routes · scripts · services · tests · server.js
+```env
+VITE_API_URL=https://prepwise-ai-1j84.onrender.com
 ```
 
-</details>
+The application appends `/api` to the backend base URL where required. Vite reads this value at build time, so redeploy the frontend after changing it.
 
-## Run locally
-
-```bash
-git clone https://github.com/Jnana1964/prepwise-ai.git && cd prepwise-ai
-
-# database
-mysql -u root -p < backend/database/schema.sql
-
-# backend: copy the env template, then fill in DB, JWT_SECRET, GEMINI_API_KEY
-cd backend && npm install && npm run dev
-
-# frontend (new terminal)
-cd frontend && npm install && npm run dev
-
-# tests
-cd backend && npm test
-```
-
-Full env list is in the **Environment variables** section above. Dev notes: [`docs/`](docs/)
-
-## Tech stack
-
-**Frontend:** React, Vite, Tailwind, React Router, Axios, Recharts, Framer Motion
-**Backend:** Node.js, Express, Sequelize, MySQL, JWT, bcrypt, Multer
-**AI:** Google Gemini (`@google/genai`)
-**Testing:** Jest, Supertest
-**Deploy:** Render (frontend static site + backend web service), managed MySQL
+> Never commit `.env` files or API keys to GitHub.
 
 ---
 
+## 📁 Project Structure
+
+```text
+prepwise-ai/
+│
+├── frontend/
+│   ├── src/
+│   │   ├── api/
+│   │   ├── components/
+│   │   ├── contexts/
+│   │   ├── layouts/
+│   │   ├── pages/
+│   │   ├── services/
+│   │   └── utils/
+│   │
+│   ├── public/
+│   ├── package.json
+│   ├── vite.config.js
+│   └── tailwind.config.js
+│
+├── backend/
+│   ├── config/
+│   ├── controllers/
+│   ├── data/
+│   ├── database/
+│   ├── middleware/
+│   ├── models/
+│   ├── routes/
+│   ├── scripts/
+│   ├── services/
+│   ├── tests/
+│   └── server.js
+│
+├── .gitignore
+└── README.md
+```
+
+---
+
+## 🚀 Getting Started
+
+**1. Clone the repository**
+
+```bash
+git clone https://github.com/Jnana1964/prepwise-ai.git
+cd prepwise-ai
+```
+
+**2. Configure MySQL:** create the database and apply `backend/database/schema.sql`. For a manual MySQL setup:
+
+```bash
+mysql -u root -p < backend/database/schema.sql
+```
+
+**3. Configure backend**
+
+```bash
+cd backend
+npm install
+```
+
+Create `backend/.env` and add your MySQL configuration, JWT secret, Gemini API key, Gemini model and CORS origin.
+
+**4. Start backend**
+
+```bash
+npm run dev
+```
+
+The backend runs on the port configured in `.env`.
+
+**5. Start frontend:** open another terminal:
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Vite will display the local frontend URL in the terminal.
+
+---
+
+## 🧪 Validation
+
+The project includes automated validation for areas including:
+
+- ATS determinism
+- Job-match boundaries
+- Authentication validation
+- Assessment threshold behavior
+- Interview gating
+- Company isolation
+- Application authorization
+- API behavior
+
+**Backend tests**
+
+```bash
+cd backend
+npm test
+```
+
+**Frontend production build**
+
+```bash
+cd frontend
+npm run build
+```
+
+---
+
+## 🌐 Production Deployment
+
+PrepWise AI is deployed as a full-stack application on Render.
+
+| Layer | Platform | URL |
+|---|---|---|
+| Frontend | Render (static site) | <https://prepwise-ai-1-zm7p.onrender.com> |
+| Backend | Render (web service) | <https://prepwise-ai-1j84.onrender.com> |
+
+```text
+                   ┌──────────────────────┐
+                   │       Render         │
+                   │      Frontend        │
+                   │   React + Vite       │
+                   └──────────┬───────────┘
+                              │
+                              │ HTTPS REST API
+                              ▼
+                   ┌──────────────────────┐
+                   │       Render         │
+                   │       Backend        │
+                   │ Node + Express       │
+                   └───────┬───────┬──────┘
+                           │       │
+                           │       │
+                           ▼       ▼
+                      ┌───────┐ ┌─────────────┐
+                      │ MySQL │ │ Gemini API  │
+                      └───────┘ └─────────────┘
+```
+
+---
+
+## 🔗 Production Links
+
+- **Live Application:** <https://prepwise-ai-1-zm7p.onrender.com>
+- **Backend API:** <https://prepwise-ai-1j84.onrender.com>
+- **Source Code:** <https://github.com/Jnana1964/prepwise-ai>
+
+---
+
+## 🌐 Opportunity Integration
+
+PrepWise AI supports database-backed opportunities and Internshala synchronization.
+
+**The opportunity pipeline**
+
+```text
+External Opportunity Source
+          ↓
+Synchronization
+          ↓
+Normalized Job Data
+          ↓
+MySQL jobs table
+          ↓
+Candidate Matching
+          ↓
+Match Explanation
+          ↓
+External Apply Link
+```
+
+The Internshala integration:
+
+- Retrieves current public internship listing information
+- Stores normalized opportunities
+- Supports periodic synchronization
+- Updates existing opportunities
+- Fails softly when external source behavior changes
+- Does not submit applications automatically
+
+The candidate completes the actual application on the external platform.
+
+---
+
+## 📄 Resume Tailoring
+
+Tailored Resume allows a candidate to provide a job description and generate a role-focused version of the resume.
+
+The generation is constrained to the candidate's existing information.
+
+| It does not invent | It can |
+|---|---|
+| Employers | Reword existing experience |
+| Job titles | Reorganize relevant information |
+| Dates | Emphasize matching skills |
+| Achievements | Target the supplied job description |
+| Experience | |
+
+The objective is to improve relevance without fabricating candidate information.
+
+---
+
+## 🧠 Progression Gates
+
+PrepWise AI uses real completion and score state to control progression.
+
+```text
+Resume
+   ↓
+Skill Builder
+   ↓
+Mock Assessment
+   ↓
+Assessment Score
+   ↓
+AI Mock Interview
+   ↓
+Performance Analytics
+```
+
+Default assessment threshold: **80%**, configurable through:
+
+```env
+MOCK_ASSESSMENT_PASS_THRESHOLD=80
+```
+
+Assessment and interview access depend on persisted completion and score state rather than arbitrary frontend conditions.
+
+---
+
+## 💡 Engineering Highlights
+
+| # | Highlight | Detail |
+|---|---|---|
+| 01 | One connected candidate profile | Resume Intelligence creates persisted candidate information consumed by downstream modules. |
+| 02 | Deterministic scoring | Core ATS and matching calculations are based on structured application data. |
+| 03 | Deterministic matching | Opportunity matching uses structured candidate and job data instead of random percentages. |
+| 04 | Real progression gates | Assessment and interview access depend on persisted completion and score state. |
+| 05 | Real persistence | User progress is stored in MySQL rather than relying only on browser state. |
+| 06 | AI + deterministic systems | AI handles generation and reasoning where useful while core scoring and state logic remain predictable. |
+| 07 | External application integrity | PrepWise never claims to submit applications on behalf of the candidate. |
+| 08 | Historical analytics | Performance can be represented as trends and deltas rather than only showing the latest result. |
+| 09 | Full-stack architecture | React + REST APIs + Node.js + Express + MySQL + Sequelize + JWT + Google Gemini |
+
+---
+
+## 🎯 Current Scope
+
+The platform currently covers the major placement workflow:
+
+```text
+Resume → Analyze → Improve / Tailor → Find Opportunities → Track Applications
+→ Build Skills → Company Mock Assessment → AI Mock Interview → Performance Analytics
+```
+
+The architecture is modular enough to extend with:
+
+- Additional companies
+- New question banks
+- More assessment patterns
+- Additional AI capabilities
+- More external opportunity sources
+
+---
+
+## 📊 What PrepWise AI Demonstrates
+
+PrepWise AI demonstrates practical full-stack engineering across:
+
+| | | |
+|---|---|---|
+| Full-stack web development | React application architecture | REST API design |
+| Authentication and authorization | JWT-based sessions | MySQL relational modeling |
+| Sequelize ORM | Resume parsing | ATS-style scoring |
+| Deterministic scoring systems | Skill extraction | Job matching |
+| Resume tailoring | AI API integration | Coding evaluation |
+| Company-specific assessments | Interview systems | Application tracking |
+| Historical analytics | Environment/secrets management | Production deployment |
+
+---
+
+## 🛡️ Production Principles
+
+PrepWise AI follows several principles designed to keep the platform trustworthy.
+
+| Principle | What it means |
+|---|---|
+| **No fake metrics** | Dashboard values are based on actual application data. |
+| **No fabricated opportunities** | Job data comes from the application's job catalog and synchronized sources. |
+| **No fake application submission** | PrepWise opens the external opportunity. The candidate submits the application. |
+| **No fabricated resume facts** | Resume tailoring is constrained to the candidate's existing information. |
+| **No exposed AI credentials** | Gemini API keys remain server-side. |
+| **No plaintext passwords** | Passwords are hashed using bcrypt. |
+
+---
+
+## 📦 Important Commands
+
+| Task | Command |
+|---|---|
+| Install backend dependencies | `cd backend && npm install` |
+| Start backend | `npm run dev` |
+| Install frontend dependencies | `cd frontend && npm install` |
+| Start frontend | `npm run dev` |
+| Build frontend | `npm run build` |
+| Run backend tests | `npm test` |
+
+---
+
+## 🔒 Security Rules
+
+Never commit:
+
+- `.env`
+- `.env.local`
+- `.env.production`
+- API keys
+- JWT secrets
+- database passwords
+- generated uploads
+- `node_modules`
+
+Especially never commit `GEMINI_API_KEY`.
+
+Production secrets should be configured through the deployment platform's environment-variable settings.
+
+---
+
+## 👤 Author
+
 <div align="center">
 
-Built by **[Bollu Jnana Keerthana](https://github.com/Jnana1964)** · B.Tech CSE, SRM IST · [Portfolio](https://jnana1964.github.io)
+**Bollu Jnana Keerthana**
+
+Computer Science Engineering · SRM University
+
+[GitHub](https://github.com/Jnana1964) · [Portfolio](https://jnana1964.github.io)
 
 </div>
+
+---
+
+## 📜 License
+
+This project is developed as a portfolio / academic project.
