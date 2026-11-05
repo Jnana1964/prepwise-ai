@@ -2,7 +2,7 @@ import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import cron from 'node-cron';
-import { connectDB } from './config/db.js';
+import { connectDB, sequelize } from './config/db.js';
 import { syncDatabase } from './models/index.js';
 import { syncInternshala } from './services/internshalaScraper.js';
 
@@ -37,7 +37,15 @@ app.use(cors({
 }));
   app.use(express.json());
 
-  app.get('/api/health', (_req, res) => res.json({ ok: true }));
+  app.get('/api/health', async (_req, res) => {
+  try {
+    await sequelize.query('SELECT 1');
+    res.json({ ok: true });
+  } catch (err) {
+    console.error('[health] DB check failed:', err.message);
+    res.status(500).json({ ok: false });
+  }
+});
 
   app.use('/api/auth', authRoutes);
   app.use('/api/resume', resumeRoutes);
